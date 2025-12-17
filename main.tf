@@ -9,10 +9,10 @@ terraform {
   }
 }
 
-# 連接到 AWS 東京區域，使用 admin profile
+# 連接到 AWS 指定 region，使用指定 profile
 provider "aws" {
-  region  = "ap-northeast-1"
-  profile = "admin"
+  region  = var.aws_region
+  profile = var.aws_profile
 }
 
 # 自動讀取最新的 Amazon Linux 2 AMI
@@ -33,20 +33,20 @@ data "aws_ami" "amazon_linux_2" {
 
 # Key Pair：上傳本地公鑰到 AWS
 resource "aws_key_pair" "my_key" {
-  key_name   = "terraform-ec2"
-  public_key = file("~/.ssh/terraform-ec2.pub")
+  key_name   = var.key_pair_name
+  public_key = file(var.public_key_path)
 }
 
 # Security Group：只開放 SSH
 resource "aws_security_group" "main" {
-  name        = "main-sg"
-  description = "Security group for EC2"
+  name        = var.security_group_name
+  description = var.security_group_description
 
   ingress {
-    from_port   = 22
-    to_port     = 22
+    from_port   = var.ssh_port
+    to_port     = var.ssh_port
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = var.allowed_cidr_blocks
   }
 
   egress {
@@ -66,7 +66,7 @@ resource "aws_instance" "main" {
   vpc_security_group_ids      = [aws_security_group.main.id]
 
   tags = {
-    Name = "my-instance"
+    Name = var.instance_name
   }
 }
 

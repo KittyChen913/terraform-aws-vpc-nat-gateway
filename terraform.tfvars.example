@@ -1,0 +1,21 @@
+# Terraform 變數值示例文件
+# 用途：提供變數的參考配置，團隊成員可複製此文件為 terraform.tfvars 並根據自身環境修改
+# 注意：terraform.tfvars 中包含敏感信息，應添加到 .gitignore，不要提交到版本控制
+
+# AWS 配置
+aws_region  = "ap-northeast-1"
+aws_profile = "admin"
+
+# Key Pair 配置
+key_pair_name   = "terraform-ec2"
+public_key_path = "~/.ssh/terraform-ec2.pub"
+
+# Security Group 配置
+security_group_name        = "main-sg"
+security_group_description = "Security group for EC2"
+ssh_port                   = 22
+allowed_cidr_blocks        = ["0.0.0.0/0"]
+
+# EC2 Instance 配置
+instance_type = "t3.micro"
+instance_name = "my-instance"
