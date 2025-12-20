@@ -76,6 +76,11 @@ cat ~/.ssh/terraform-ec2.pub
    ssh -i <key-pair-path> ec2-user@<ec2-public-ip>
    ```
 
+8. **銷毀此設定檔配置的所有資源**
+   ```bash
+   terraform destroy
+   ```
+
 ## 項目結構
 
 ```text
