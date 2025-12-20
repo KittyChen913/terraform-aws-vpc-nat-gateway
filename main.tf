@@ -74,3 +74,9 @@ resource "aws_instance" "main" {
 output "instance_public_ip" {
   value = aws_instance.main.public_ip
 }
+
+# Output：輸出 SSH 登入命令
+output "ssh_command" {
+  value       = "ssh -i ~/.ssh/terraform-ec2 ec2-user@${aws_instance.main.public_ip}"
+  description = "SSH 登入命令"
+}
