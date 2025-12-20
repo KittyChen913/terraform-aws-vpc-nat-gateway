@@ -20,7 +20,7 @@
 #### 前置條件
 
 - 安裝 [Terraform](https://www.terraform.io/)
-- 配置 [AWS CLI](https://aws.amazon.com/cli/) profile
+- 配置 [AWS CLI Profile](https://docs.aws.amazon.com/zh_tw/cli/v1/userguide/cli-configure-files.html#cli-configure-files-format-profile) 
 - 生成 SSH Key
 
 #### AWS Key Pair 生成
