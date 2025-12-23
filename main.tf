@@ -142,7 +142,7 @@ resource "aws_security_group" "main" {
 }
 
 # EC2 實例配置
-resource "aws_instance" "main" {
+resource "aws_instance" "public" {
   ami                    = data.aws_ami.amazon_linux_2.id
   instance_type          = "t3.micro"
   key_name               = aws_key_pair.my_key.key_name
@@ -150,17 +150,37 @@ resource "aws_instance" "main" {
   vpc_security_group_ids = [aws_security_group.main.id]
 
   tags = {
-    Name = "my-instance"
+    Name = "my-public-instance"
+  }
+}
+
+# Private EC2 實例配置
+resource "aws_instance" "private" {
+  ami                    = data.aws_ami.amazon_linux_2.id
+  instance_type          = "t3.micro"
+  key_name               = aws_key_pair.my_key.key_name
+  subnet_id              = aws_subnet.private_subnet.id
+  vpc_security_group_ids = [aws_security_group.main.id]
+
+  tags = {
+    Name = "my-private-instance"
   }
 }
 
 # Output：輸出實例 Public IP
 output "instance_public_ip" {
-  value = aws_instance.main.public_ip
+  value       = aws_instance.public.public_ip
+  description = "Public instance 的 Public IP"
+}
+
+# Output：輸出 Private Instance Private IP
+output "instance_private_ip" {
+  value       = aws_instance.private.private_ip
+  description = "Private instance 的 Private IP"
 }
 
 # Output：輸出 SSH 登入命令
 output "ssh_command" {
-  value       = "ssh -i ~/.ssh/terraform-ec2 ec2-user@${aws_instance.main.public_ip}"
+  value       = "ssh -i ~/.ssh/terraform-ec2 ec2-user@${aws_instance.public.public_ip}"
   description = "SSH 登入命令"
 }
