@@ -70,6 +70,50 @@ resource "aws_subnet" "private_subnet" {
   }
 }
 
+# Internet Gateway：提供 public subnet 連接到網際網路
+resource "aws_internet_gateway" "main" {
+  vpc_id = aws_vpc.main_vpc.id
+
+  tags = {
+    Name = "main-igw"
+  }
+}
+
+# Public Route Table：用於 public subnet
+resource "aws_route_table" "public" {
+  vpc_id = aws_vpc.main_vpc.id
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.main.id
+  }
+
+  tags = {
+    Name = "public-rt"
+  }
+}
+
+# Public Route Table Association：將 public subnet 與 public route table 關聯
+resource "aws_route_table_association" "public" {
+  subnet_id      = aws_subnet.public_subnet.id
+  route_table_id = aws_route_table.public.id
+}
+
+# Private Route Table：用於 private subnet
+resource "aws_route_table" "private" {
+  vpc_id = aws_vpc.main_vpc.id
+
+  tags = {
+    Name = "private-rt"
+  }
+}
+
+# Private Route Table Association：將 private subnet 與 private route table 關聯
+resource "aws_route_table_association" "private" {
+  subnet_id      = aws_subnet.private_subnet.id
+  route_table_id = aws_route_table.private.id
+}
+
 # Key Pair：上傳本地公鑰到 AWS
 resource "aws_key_pair" "my_key" {
   key_name   = var.key_pair_name
