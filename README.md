@@ -1,6 +1,6 @@
-# terraform-aws-ec2-example
+# Terraform AWS VPC & NAT Gateway
 
-一個用於創建 AWS EC2 執行個體的 Terraform 示範專案。
+一個用於創建 AWS VPC 和 NAT Gateway 的 Terraform 專案。
 
 ## 架構圖
 ![Architecture](docs/terraform-aws-ec2-example.drawio.png)
