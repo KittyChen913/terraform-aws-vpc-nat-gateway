@@ -1,7 +1,7 @@
 variable "aws_region" {
   description = "AWS 地區"
   type        = string
-  default     = "ap-northeast-1"
+  default     = "us-east-1"
 }
 
 variable "aws_profile" {
