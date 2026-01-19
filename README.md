@@ -16,76 +16,61 @@
   - 出站網際網路流量通過 NAT Gateway 進行 (對外隱藏真實 IP)
   - 無法從外部直接連接
 
-## 快速開始
-
-### 前置條件
+## 環境需求
 
 - 安裝 [Terraform](https://www.terraform.io/)
-- 配置 [AWS CLI Profile](https://docs.aws.amazon.com/zh_tw/cli/v1/userguide/cli-configure-files.html#cli-configure-files-format-profile) 
-- 生成 SSH Key
+- 配置 [AWS CLI Profile](https://docs.aws.amazon.com/zh_tw/cli/v1/userguide/cli-configure-files.html#cli-configure-files-format-profile)
 
-### AWS Key Pair 生成
+## SSH Key 配置
 
-本項目使用本地生成的 SSH public key 上傳至 AWS。如果還沒有 SSH Key，請執行以下命令生成：
+這個專案會建立 EC2 實例，需要 SSH Key 來進行連線測試。
 
+如果還沒有 SSH Key，請執行以下命令生成：
 ```bash
-# 生成新的 SSH Key 如果已有可跳過）
 ssh-keygen -t ed25519 -f ~/.ssh/terraform-ec2
-
-# 查看生成的 public key
-cat ~/.ssh/terraform-ec2.pub
 ```
 
-**說明：**
-- `~/.ssh/terraform-ec2` - private key 檔案（保管好，用於登入 EC2）
-- `~/.ssh/terraform-ec2.pub` - public key 檔案（將用於在 AWS 中建立 Key Pair）
-- Terraform 會自動將 public key 上傳到 AWS 建立 Key Pair
+這會產生兩個檔案：
+- `~/.ssh/terraform-ec2` - 私鑰（保管好，不要分享）
+- `~/.ssh/terraform-ec2.pub` - 公鑰（Terraform 會上傳到 AWS）
 
+公鑰會被上傳到 AWS 作為 Key Pair，讓你可以用私鑰 SSH 連線到 EC2 實例進行測試。
 
-### 使用步驟
+## 快速開始
 
 1. **複製範例配置文件**
    ```bash
    cp terraform.tfvars.example terraform.tfvars
    ```
 
-2. **修改 terraform.tfvars** 配置你的設定
+2. **客製化你的配置**
    ```bash
    vim terraform.tfvars
    ```
 
-3. **初始化 Terraform**
+3. **初始化並部署**
    ```bash
    terraform init
-   ```
-
-4. **檢查執行計劃**
-   ```bash
    terraform plan
-   ```
-
-5. **應用配置**
-   ```bash
    terraform apply
    ```
 
-6. **查看輸出結果** - 在 console 中會顯示 `instance_public_ip`、`instance_private_ip` 和 SSH 登入命令
-
-7. **從 console 輸出中複製 SSH 命令並連接**
+4. **測試連線**
    
-   連接 Public Instance：
+   部署完成後會 output 以下連線字串，可直接複製使用：
+   <br>
+   
+   連接 Public EC2：
    ```bash
-   # 複製 console 中的 ssh_command 並執行
-   ssh -i ~/.ssh/terraform-ec2 ec2-user@<public-instance-ip>
+   ssh -i ~/.ssh/terraform-ec2 ec2-user@<public_ec2_ip>
    ```
    
-   連接 Private Instance (透過 Bastion)：
+   連接 Private EC2（透過 Bastion）：
    ```bash
-   # 複製 console 中的 ssh_command_via_bastion 並執行
    ssh -o "ProxyCommand=ssh -i ~/.ssh/terraform-ec2 -W %h:%p ec2-user@<public-ip>" -i ~/.ssh/terraform-ec2 ec2-user@<private-ip>
    ```
 
-8. **銷毀此設定檔配置的所有資源**
+5. **使用完畢，清理資源**
    ```bash
    terraform destroy
    ```
