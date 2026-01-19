@@ -78,19 +78,19 @@ ssh-keygen -t ed25519 -f ~/.ssh/terraform-ec2
 ## 項目結構
 
 ```text
-.
-├── .gitignore                 # Git 忽略文件配置
-├── .terraform.lock.hcl        # Terraform 鎖定 provider 版本的檔案
-├── docs/                      # 專案文件目錄 (包含架構圖)
-├── providers.tf               # Terraform 配置和 Data Sources
-├── network.tf                 # VPC、Subnet、Internet Gateway、NAT Gateway、Route Table
-├── security.tf                # Key Pair、Security Group
-├── compute.tf                 # EC2 Instance
-├── outputs.tf                 # Output 定義
-├── variables.tf               # 變數定義
-├── terraform.tfvars.example   # 變數值範例文件
-├── README.md                  # 專案說明文件
-└── terraform.tfstate*         # Terraform 狀態文件 (不會提交到 Git)
+📁 terraform-aws-vpc-nat-gateway/
+├── 📄 providers.tf               # Terraform 配置和 Data Sources
+├── 📄 network.tf                 # VPC、Subnet、Internet Gateway、NAT Gateway、Route Table
+├── 📄 security.tf                # Key Pair、Security Group
+├── 📄 compute.tf                 # EC2 Instance
+├── 📄 outputs.tf                 # Output 定義
+├── 📄 variables.tf               # 變數定義
+├── 📄 .terraform.lock.hcl        # Terraform 鎖定 provider 版本的檔案
+├── 📄 terraform.tfvars.example   # 變數值範例文件
+├── 📄 .gitignore                 # Git 忽略文件配置
+├── 📄 README.md                  # 專案說明文件
+├── 📄 terraform.tfstate*         # Terraform 狀態文件 (不會提交到 Git)
+└── 📁 docs/                      # 架構圖
 ```
 
 ## 資源說明
@@ -111,7 +111,7 @@ ssh-keygen -t ed25519 -f ~/.ssh/terraform-ec2
 - **Public EC2 Instance** - 可直接從外部連接 (10.0.0.0/20 subnet)
 - **Private EC2 Instance** - 只能透過 Public Instance (Bastion) 連接，但可透過 NAT Gateway 訪問網際網路
 
-## 注意事項
+## ⚠️ 注意事項
 
 - `terraform.tfstate` 包含敏感信息，已加入 `.gitignore`，不會提交到版本控制
 - 確保 AWS CLI profile 正確配置（此範例使用 `admin` profile）
